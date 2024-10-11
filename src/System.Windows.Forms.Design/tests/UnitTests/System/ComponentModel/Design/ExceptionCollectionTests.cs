@@ -18,7 +18,7 @@ public class ExceptionCollectionTests
 
     [Theory]
     [MemberData(nameof(Ctor_ArrayList_TestData))]
-    public void ExceptionCollection_Ctor_ArrayList(ArrayList exceptions)
+    public void ExceptionCollection_Ctor_ArrayList(List<Exception> exceptions)
     {
         ExceptionCollection collection = new(exceptions);
         if (exceptions is null)
@@ -37,7 +37,7 @@ public class ExceptionCollectionTests
     [Fact]
     public void ExceptionCollection_Ctor_ArguementException()
     {
-        ArrayList exceptions = [1, 2, 3];
+        List<Exception> exceptions = new List<Exception> { new ArgumentException("1") };
         Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
     }
 
@@ -48,7 +48,7 @@ public class ExceptionCollectionTests
         using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
         using MemoryStream stream = new();
         BinaryFormatter formatter = new();
-        ExceptionCollection collection = new(new ArrayList());
+        ExceptionCollection collection = new(new List<Exception>());
         if (formatterEnabled)
         {
             Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
@@ -62,7 +62,7 @@ public class ExceptionCollectionTests
     [Fact]
     public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
     {
-        ExceptionCollection collection = new(new ArrayList());
+        ExceptionCollection collection = new(new List<Exception>());
         Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
     }
 }
